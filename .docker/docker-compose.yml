@@ -1,0 +1,17 @@
+name: ${PROJECT_NAME}
+services:
+  python:
+    container_name: ${PYTHON_CONTAINER_NAME}
+    build:
+      context: ..
+      dockerfile: .docker/Dockerfile
+      args:
+        PYTHON_IMAGE: ${PYTHON_IMAGE}
+        PYTHON_TAG: ${PYTHON_TAG}
+    environment:
+      - TZ=Europe/Madrid
+    volumes:
+      - ..:/app
+    ports:
+      - ${PYTHON_PORT}:8001
+    restart: unless-stopped
