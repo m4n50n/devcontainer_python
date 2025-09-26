@@ -8,14 +8,15 @@ Estas instrucciones funcionan con el `start.sh` actual (arranca Uvicorn cuando e
 - Abrir el repo en *Dev Container* (Rebuild and Reopen)
 
 ## 1. Estructura mínima
+
 Ejecuta esto **dentro del contenedor**:
 
 ```bash
 mkdir -p /app/api/src
-touch /app/api/__init__.py /app/api/src/__init__.py
 ```
 
 ## 2. Crea main.py
+
 Ruta: `/app/api/src/main.py`.
 
 > Nota: el import path que usa Uvicorn es `api.src.main:app`. Mantén estos nombres de carpetas/archivo.
@@ -35,7 +36,8 @@ async def health():
 ```
 
 ## 3. Dependencias
-Opción A (persistente): crea `/app/requirements.txt`:
+
+Opción A (persistente - recomendado): debes crear `/app/api/requirements.txt` antes de hacer el rebuild para que `init.sh` lo detecte e instale:
 
 ```text
 fastapi[standard]
@@ -47,33 +49,48 @@ Opción B (rápida en esta sesión):
 `pip install 'fastapi[standard]' debugpy`
 
 ## 4. Reinicia
+
 - VS Code: Dev Containers → Rebuild and Reopen in Container
 - O desde host/WSL: docker compose restart python
 
 ## 5. Probar
+
 ```bash
 curl -s http://localhost:8001/ | jq .
 curl -s http://localhost:8001/health | jq .
 ```
 
 #### Docs
+
 Swagger: http://localhost:8001/docs
 ReDoc: http://localhost:8001/redoc
 
 ## 6. Debug
+
 Con DEBUG=1 y debugpy instalado, puedes Attach al puerto 5678 desde VS Code.
 
 ---
 
 ### Estructura esperada:
+
 ```text
 /app
- ├─ requirements.txt
  └─ api/
-    ├─ __init__.py
+    ├─ requirements.txt
     └─ src/
-       ├─ __init__.py
        └─ main.py    # define `app`
+```
+
+### /app/api/requirements.txt – Ejemplo:
+
+```txt
+# Web framework
+fastapi[standard]
+
+# Development tools
+black>=23.0.0  # Code formatter
+isort>=5.12.0  # Import sorting
+debugpy>=1.6.0  # Debugging tool
 ```
 
 ### Problemas comunes
@@ -82,7 +99,7 @@ Con DEBUG=1 y debugpy instalado, puedes Attach al puerto 5678 desde VS Code.
 *Solución*: Crea el archivo como en el paso 2 y reinicia el contenedor.
 
 - *Mensaje*: `[start] fastapi/uvicorn are not installed.`
-*Solución*: Si usas Opción A, espera a que termine el init.sh (verás “Installing dependencies…” en la terminal). Si no, ejecuta `pip install 'fastapi[standard]'` y verifica `python -c "import fastapi, uvicorn; print('OK')"`
+*Solución*: Asegúrate de que exista `/app/api/requirements.txt` y que `init.sh` lo haya instalado. Si no, ejecuta `pip install 'fastapi[standard]' debugpy` y verifica con `python -c "import fastapi, uvicorn; print('OK')"`.
 
 - *No veo nada en el puerto 8001*:
 Asegúrate de estar en el Dev Container y que el puerto 8001 esté reenviado (VS Code → Pestaña Ports).
