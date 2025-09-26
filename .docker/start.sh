@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-APP_DIR="/app/api"
+APP_DIR="/workspace/app"
 MAIN_FILE="$APP_DIR/src/main.py"
 RELOAD_DIR="$APP_DIR"
 DEBUG_PORT="${DEBUG_PORT:-5678}"
@@ -26,7 +26,7 @@ if [ ! -f "$MAIN_FILE" ]; then
   log "$MAIN_FILE not found."
   log "Container is running and waiting."
   log "To get started:"
-  log "  1) Create /app/api/src/main.py with a FastAPI app named 'app'."
+  log "  1) Create /workspace/app/src/main.py with a FastAPI app named 'app'."
   log "  2) Install deps: pip install 'fastapi[standard]'"
   log "  3) Restart the container."
   exec tail -f /dev/null
@@ -62,14 +62,14 @@ fi
 if [ "$RUN_DEBUG" = "1" ]; then
   log "Starting FastAPI with debugpy on :${DEBUG_PORT}..."
   exec python -m debugpy --listen 0.0.0.0:${DEBUG_PORT} \
-       -m uvicorn api.src.main:app \
+       -m uvicorn app.src.main:app \
        --host 0.0.0.0 --port 8001 --reload \
        --reload-dir "$RELOAD_DIR" \
        --reload-exclude "*.log" --reload-exclude "__pycache__" --reload-exclude ".git" \
        --workers 1 --timeout-keep-alive 2 --reload-delay 0.25 --log-level debug
 else
   log "Starting FastAPI (no debug)..."
-  exec uvicorn api.src.main:app \
+  exec uvicorn app.src.main:app \
        --host 0.0.0.0 --port 8001 --reload \
        --reload-dir "$RELOAD_DIR" \
        --reload-exclude "*.log" --reload-exclude "__pycache__" --reload-exclude ".git" \

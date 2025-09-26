@@ -11,7 +11,7 @@ services:
     environment:
       - TZ=Europe/Madrid
     volumes:
-      - ..:/app
+      - ..:/workspace
     ports:
       - ${PYTHON_PORT}:8001
     restart: unless-stopped

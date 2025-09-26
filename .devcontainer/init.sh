@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_DIR="/app"
-REQ_FILE="/app/api/requirements.txt"
+PROJECT_DIR="/workspace"
+REQ_FILE="/workspace/app/requirements.txt"
 
 # Detect requirements.txt
 if [ ! -f "$REQ_FILE" ]; then
@@ -12,7 +12,7 @@ fi
 
 # Avoid permission issues with git
 git config --global --add safe.directory "$PROJECT_DIR" || true
-git config --global --add safe.directory "$PROJECT_DIR/api" || true
+git config --global --add safe.directory "$PROJECT_DIR/app" || true
 
 # Speed up pip and reduce noise
 export PIP_DISABLE_PIP_VERSION_CHECK=1

@@ -2,7 +2,7 @@
   "name": "FastAPI API | Dev Container",
   "dockerComposeFile": "../.docker/docker-compose.yml",
   "service": "python",
-  "workspaceFolder": "/app",
+  "workspaceFolder": "/workspace",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -57,12 +57,12 @@
   "onCreateCommand": [
     "bash",
     "-lc",
-    "if [ -f /app/.devcontainer/init.sh ]; then sed -i 's/\\r$//' /app/.devcontainer/init.sh && chmod +x /app/.devcontainer/init.sh; fi"
+    "if [ -f /workspace/.devcontainer/init.sh ]; then sed -i 's/\\r$//' /workspace/.devcontainer/init.sh && chmod +x /workspace/.devcontainer/init.sh; fi"
   ],
   "postAttachCommand": [
     "bash",
     "-lc",
-    "bash /app/.devcontainer/init.sh"
+    "bash /workspace/.devcontainer/init.sh"
   ],
   "containerEnv": {
     "DEBUG": "1"
